@@ -1,8 +1,26 @@
 #!/usr/bin/env bash
 # A Bash script that pings an IP address passed as an argument. 
-if [ $# -eq 0 ]
+
+# Check if the number of arguments provided is incorrect
+if [ $# -ne 1 ];
 then
-	echo "Usage: 5-is_the_host_on_the_network {IP_ADDRESS}"
-else
-	ping -c 5 "$1"
+    echo "Usage: $0 <IP_ADDRESS>"
+    exit 1
+fi
+
+# Validate the IP address format using regex
+if [[ ! $1 =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]];
+then
+    echo "Error: Invalid IP address format."
+    echo "Usage: $0 <IP_ADDRESS>"
+    exit 1
+fi
+
+# Ping the provided IP address
+ping -c 5 "$1"
+
+# Check the exit status of the ping command
+if [ $? -ne 0 ];
+then
+    echo "Error: Ping failed. The host may be unreachable."
 fi
